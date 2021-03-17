@@ -1,0 +1,7 @@
+{
+  "name": "IonicFirestoreTasks",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
