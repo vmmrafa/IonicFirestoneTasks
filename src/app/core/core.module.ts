@@ -1,11 +1,18 @@
 import { RouteReuseStrategy } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { NgModule } from '@angular/core';
+import { AngularFireModule } from "@angular/fire";
+
+import { AngularFireAuthModule } from '@angular/fire/auth';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
+import { environment } from './../../environments/environment.prod';
 
 @NgModule({
   imports: [
-    IonicModule.forRoot()
+    AngularFireModule.initializeApp (environment.firebaseConfig),
+    AngularFireAuthModule
   ],
   exports: [
     BrowserModule,
