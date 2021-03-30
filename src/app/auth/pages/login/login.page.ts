@@ -1,3 +1,4 @@
+import { OverlayService } from './../../../core/services/overlay.service';
 import { AuthOptions } from './../../../core/services/auth-options';
 import { AuthProvider } from './../../../core/services/auth-provider';
 import { AuthService } from './../../../core/services/auth.service';
@@ -22,7 +23,7 @@ export class LoginPage implements OnInit {
 
   private nameControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private overlayService: OverlayService) { }
 
   ngOnInit() {
     this.createForm();
@@ -36,15 +37,15 @@ export class LoginPage implements OnInit {
   }
 
   name(): FormControl {
-    return <FormControl> this.authForm.get('name');
+    return <FormControl>this.authForm.get('name');
   }
 
   email(): FormControl {
-    return <FormControl> this.authForm.get('email');
+    return <FormControl>this.authForm.get('email');
   }
 
   password(): FormControl {
-    return <FormControl> this.authForm.get('password');
+    return <FormControl>this.authForm.get('password');
   }
 
   changeAuthAction() {
@@ -58,15 +59,21 @@ export class LoginPage implements OnInit {
   }
 
   async onSubmit(provider: AuthProvider) {
+    const loading = await this.overlayService.loading();
 
     try {
       const credentials = await this.authService.authenticate(
-                                                                new AuthOptions(this.configs.isSignIn, provider, new Auth(null, this.email().value, this.password().value))
-                                                              );
+        new AuthOptions(this.configs.isSignIn, provider, new Auth(null, this.email().value, this.password().value))
+      );
       console.log('Authenticated: ', credentials);
       console.log('Redirect ');
-    }catch(e) {
+    } catch (e) {
       console.log('Auth error: ', e);
+      await this.overlayService.toast({
+        message: e.message
+      });
+    } finally {
+      loading.dismiss();
     }
   }
 }
