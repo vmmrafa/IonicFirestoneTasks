@@ -1,3 +1,4 @@
+import { AuthGuard } from './core/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
@@ -9,7 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/auth.module').then( a => a.AuthModule)
+    loadChildren: () => import('./auth/auth.module').then(a => a.AuthModule)
+  },
+  {
+    path: 'tasks',
+    loadChildren: () => import('./tasks/tasks.module').then(t => t.TasksModule),
+    canLoad: [AuthGuard]
   },
 ];
 
