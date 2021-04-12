@@ -9,6 +9,14 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
       {
+        path: 'create',
+        loadChildren: () => import('./page/task-form/task-form.module').then( m => m.TaskFormPageModule)
+      },
+      {
+        path: 'edit/:id',
+        loadChildren: () => import('./page/task-form/task-form.module').then( m => m.TaskFormPageModule)
+      },
+      {
         path: '',
         loadChildren: () => import('./pages/tasks-list/tasks-list.module').then(t => t.TasksListPageModule)
       }
