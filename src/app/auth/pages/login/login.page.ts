@@ -64,14 +64,19 @@ export class LoginPage implements OnInit {
     !isSignIn
       ? this.authForm.addControl('name', this.nameControl)
       : this.authForm.removeControl('name');
+
+      console.log(!isSignIn);
+    console.log(this.authForm.value);
   }
 
   async onSubmit(provider: AuthProvider) {
     const loading = await this.overlayService.loading();
 
     try {
+      let isRegisteredUser = this.configs.isSignIn;
       const credentials = await this.authService.authenticate(
-        new AuthOptions(this.configs.isSignIn, provider, new Auth(null, this.email().value, this.password().value))
+        new AuthOptions(isRegisteredUser, provider,
+                          new Auth((isRegisteredUser) ? null : this.name().value, this.email().value, this.password().value))
       );
 
       this.navController.navigateForward(this.route.snapshot.queryParamMap.get('redirect') || '/tasks');
